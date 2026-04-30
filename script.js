@@ -4,6 +4,44 @@ if (yearSpan) {
   yearSpan.textContent = new Date().getFullYear();
 }
 
+// Handle PDF download for all devices (especially mobile)
+const downloadCVBtn = document.querySelector('.download-cv-btn');
+if (downloadCVBtn) {
+  downloadCVBtn.addEventListener('click', async (e) => {
+    e.preventDefault();
+    
+    const pdfUrl = downloadCVBtn.getAttribute('href');
+    const fileName = pdfUrl.split('/').pop() || 'EMMANUEL-UDORAH-CV.pdf';
+    
+    try {
+      const response = await fetch(pdfUrl);
+      const blob = await response.blob();
+      
+      // Create a blob URL
+      const blobUrl = window.URL.createObjectURL(blob);
+      
+      // Create a temporary link and trigger download
+      const tempLink = document.createElement('a');
+      tempLink.href = blobUrl;
+      tempLink.download = fileName;
+      tempLink.style.display = 'none';
+      
+      document.body.appendChild(tempLink);
+      tempLink.click();
+      document.body.removeChild(tempLink);
+      
+      // Clean up the blob URL
+      setTimeout(() => {
+        window.URL.revokeObjectURL(blobUrl);
+      }, 100);
+    } catch (error) {
+      // Fallback: open the PDF in a new tab if download fails
+      console.warn('Download failed, opening PDF in new tab:', error);
+      window.open(pdfUrl, '_blank');
+    }
+  });
+}
+
 // Optional: smooth scrolling for internal links (basic fallback)
 document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   anchor.addEventListener('click', function (e) {
@@ -57,6 +95,58 @@ if ('IntersectionObserver' in window) {
   // Fallback: make everything visible
   revealSections.forEach((el) => el.classList.add('reveal-visible'));
   revealItems.forEach((el) => el.classList.add('reveal-visible'));
+}
+
+// Handle contact form submission without page redirect
+const contactForm = document.querySelector('.contact-form');
+if (contactForm) {
+  contactForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData(contactForm);
+    const button = contactForm.querySelector('button[type="submit"]');
+    const originalText = button.textContent;
+    
+    try {
+      button.textContent = 'Sending...';
+      button.disabled = true;
+      
+      const response = await fetch(contactForm.getAttribute('action'), {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+      
+      if (response.ok) {
+        // Success! Show message and reset form
+        button.textContent = 'Message Sent! ✓';
+        button.style.backgroundColor = '#4ade80';
+        contactForm.reset();
+        
+        // Reset button after 3 seconds
+        setTimeout(() => {
+          button.textContent = originalText;
+          button.disabled = false;
+          button.style.backgroundColor = '';
+        }, 3000);
+      } else {
+        button.textContent = 'Error sending. Try again.';
+        setTimeout(() => {
+          button.textContent = originalText;
+          button.disabled = false;
+        }, 3000);
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
+      button.textContent = 'Error. Please try again.';
+      setTimeout(() => {
+        button.textContent = originalText;
+        button.disabled = false;
+      }, 3000);
+    }
+  });
 }
 
 // Skills tabs toggle

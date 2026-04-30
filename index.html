@@ -33,7 +33,7 @@
             <div class="hero-actions">
               <a href="#projects" class="btn secondary">View Projects</a>
               <a href="#contact" class="btn secondary">Contact Me</a>
-              <a href="EMMANUEL-UDORAH-CV.pdf" class="btn primary download-cv-btn" download>
+              <a href="EMMANUEL-UDORAH-CV.pdf" class="btn primary download-cv-btn">
                 <span class="btn-icon" aria-hidden="true">
                   <svg viewBox="0 0 24 24" width="16" height="16" xmlns="http://www.w3.org/2000/svg">
                     <path
@@ -495,19 +495,20 @@
               </div>
             </div>
 
-            <form class="contact-form reveal-item">
+            <form action="https://formspree.io/f/mkoynzdg" method="POST" class="contact-form reveal-item">
               <div class="form-field">
-                <label for="name">Name</label>
-                <input id="name" type="text" placeholder="Your name" />
+                <label for="full-name">Full Name</label>
+                <input type="text" name="name" id="full-name" placeholder="John Doe" required>
               </div>
               <div class="form-field">
-                <label for="email">Email</label>
-                <input id="email" type="email" placeholder="your@email.com" />
+                <label for="email-address">Email Address</label>
+                <input type="email" name="_replyto" id="email-address" placeholder="email@domain.com" required>
               </div>
               <div class="form-field">
                 <label for="message">Message</label>
-                <textarea id="message" rows="4" placeholder="Your message..."></textarea>
+                <textarea rows="5" name="message" id="message" placeholder="Type your message here..." required></textarea>
               </div>
+              <input type="hidden" name="_subject" value="New submission from Portfolio!">
               <button type="submit" class="btn primary contact-submit">Send Message</button>
             </form>
           </div>
