@@ -11,7 +11,7 @@ if (downloadCVBtn) {
     e.preventDefault();
     
     const pdfUrl = downloadCVBtn.getAttribute('href');
-    const fileName = pdfUrl.split('/').pop() || 'EMMANUEL-UDORAH-CV.pdf';
+    const fileName = pdfUrl.split('/').pop() || 'Emmanuel-Udorah-CV.pdf';
     
     try {
       const response = await fetch(pdfUrl);
